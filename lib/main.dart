@@ -3,6 +3,8 @@ import 'dart:convert';
 
 import 'package:flutter/services.dart';
 
+import 'shared/snackbar.dart';
+
 void main() {
   runApp(const MyApp());
 }
@@ -12,11 +14,13 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
+      scaffoldMessengerKey:
+          FlutterSnackBar.instance.flutterScaffoldMessengerKey,
       // Hide the debug banner
       debugShowCheckedModeBanner: false,
       title: 'Language_validator',
-      home: HomePage(),
+      home: const HomePage(),
     );
   }
 }
@@ -36,6 +40,13 @@ class _HomePageState extends State<HomePage> {
     final data = await json.decode(response);
     setState(() {
       _items = data["items"];
+      if (_items.isEmpty || _items == null) {
+        FlutterSnackBar.instance
+            .showSnackBarError('Falha ao carregar recursos');
+      } else {
+        FlutterSnackBar.instance
+            .showSnackBarSucess('Recursos carregados com sucesso!');
+      }
     });
   }
 
@@ -53,7 +64,7 @@ class _HomePageState extends State<HomePage> {
         child: Column(
           children: [
             ElevatedButton(
-              child: const Text('Load Data'),
+              child: const Text('Carregar recursos'),
               onPressed: readJson,
             ),
             Padding(
