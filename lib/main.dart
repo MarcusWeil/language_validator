@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
     return const MaterialApp(
       // Hide the debug banner
       debugShowCheckedModeBanner: false,
-      title: 'Kindacode.com',
+      title: 'Language_validator',
       home: HomePage(),
     );
   }
@@ -31,7 +31,6 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   List _items = [];
 
-  // Fetch content from the json file
   Future<void> readJson() async {
     final String response = await rootBundle.loadString('assets/sample.json');
     final data = await json.decode(response);
@@ -46,7 +45,7 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         centerTitle: true,
         title: const Text(
-          'Kindacode.com',
+          'Language Validator',
         ),
       ),
       body: Padding(
@@ -57,6 +56,30 @@ class _HomePageState extends State<HomePage> {
               child: const Text('Load Data'),
               onPressed: readJson,
             ),
+            Padding(
+              padding: const EdgeInsets.only(top: 20.0),
+              child: Row(
+                children: const [
+                  Padding(
+                    padding: EdgeInsets.only(left: 10.0, right: 10),
+                    child: Text(
+                      'Language',
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  Expanded(
+                    child: Center(
+                      child: Text(
+                        'Information',
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
 
             // Display the data loaded from sample.json
             _items.isNotEmpty
@@ -65,11 +88,17 @@ class _HomePageState extends State<HomePage> {
                       itemCount: _items.length,
                       itemBuilder: (context, index) {
                         return Card(
-                          margin: const EdgeInsets.all(10),
+                          margin: const EdgeInsets.only(top: 10, bottom: 10),
                           child: ListTile(
-                            leading: Text(_items[index]["id"]),
-                            title: Text(_items[index]["name"]),
-                            subtitle: Text(_items[index]["description"]),
+                            // leading: Text(_items[index]["resource_id"]),
+                            leading: Text(_items[index]["language_id"]),
+                            title: Center(child: Text(_items[index]["value"])),
+                            subtitle: Column(
+                              children: [
+                                Text(_items[index]["updated_at"]),
+                                Text(_items[index]["resource_id"])
+                              ],
+                            ),
                           ),
                         );
                       },
